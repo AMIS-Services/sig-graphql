@@ -1,13 +1,26 @@
 import express from "express";
-import Sequelize from "sequelize";
 import db from "../../db";
 
 const Person = db.person;
+const Project = db.project;
 const router = express.Router();
 
 router.get("/", async (_, res) => {
-  const people = await Person.findAll();
-  res.json({ people });
+  const people = await Person.findAll({
+    include: [{ model: Project, attributes: ["id"], through: { attributes: [] } }]
+  });
+
+  // const returnArray = people
+  //   .map(p => p.get({ plain: true }))
+  //   .map(pers => {
+  //     // pers.projects = pers.projects.map(proj => {
+  //     //   delete proj.PersonProject;
+  //     //   return proj;
+  //     // });
+  //     return pers;
+  //   });
+
+  res.json(people);
 });
 
 router.post("/", async (req, res) => {

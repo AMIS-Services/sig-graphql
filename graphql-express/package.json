@@ -1,8 +1,10 @@
 {
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "start-db": "docker run -p 5432:5432 --name graphqlPostgres -e POSTGRES_PASSWORD=postgres_password -d postgres",
-    "stop-db": "docker rm -f graphqlPostgres"
+    "start-db": "docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=postgres_password --name graphqlPostgres postgres",
+    "seed-db": "babel-node seed.js",
+    "stop-db": "docker rm -f graphqlPostgres",
+    "reset-db": "yarn stop-db & yarn start-db"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
