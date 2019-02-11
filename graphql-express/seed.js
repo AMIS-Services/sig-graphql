@@ -34,6 +34,7 @@ const seed = async () => {
 
   const projectEntities = await Promise.all(projects.map(async project => await db.project.create({ ...project })));
 
+  // people <-> practices
   uiPeopleEntities.map(person => {
     person.practiceId = practiceEntities[0].dataValues.id;
     db.person.update(person.dataValues, { where: { id: person.dataValues.id } });
@@ -44,9 +45,16 @@ const seed = async () => {
     db.person.update(person.dataValues, { where: { id: person.dataValues.id } });
   });
 
+  // people <-> projects
   allPersonEntities
     .filter(person => cisMembers.includes(person.dataValues.name))
     .map(person => person.addProject(projectEntities[0]));
+
+  // practices <->projects
+  projectEntities[0].addPractice(practiceEntities[0]);
+  projectEntities[0].addPractice(practiceEntities[1]);
+
+  // projects <-> companies
 };
 
 seed();

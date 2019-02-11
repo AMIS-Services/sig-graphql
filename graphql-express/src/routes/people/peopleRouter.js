@@ -4,18 +4,15 @@ import db from "../../db";
 const Person = db.person;
 const Project = db.project;
 const router = express.Router();
+const include = [{ model: Project, attributes: ["id"], through: { attributes: [] } }];
 
 router.get("/", async (_, res) => {
-  const people = await Person.findAll({
-    include: [{ model: Project, attributes: ["id"], through: { attributes: [] } }]
-  });
+  const people = await Person.findAll({ include });
   res.json(people);
 });
 
 router.get("/:id", async (req, res) => {
-  const person = await Person.findByPk(req.params.id, {
-    include: [{ model: Project, attributes: ["id"], through: { attributes: [] } }]
-  });
+  const person = await Person.findByPk(req.params.id, { include });
   if (!person) res.status(404).json({ message: "person not found" });
   res.json(person);
 });
@@ -32,7 +29,7 @@ router.patch("/:id", async (req, res) => {
   const affectedLines = await Person.update(person, { where: { id: req.params.id } });
   if (affectedLines[0] !== 1) res.status(400).json({ message: "bad request" });
 
-  const savedPerson = await Person.findByPk(req.params.id);
+  const savedPerson = await Person.findByPk(req.params.id, include);
   res.json(savedPerson);
 });
 
