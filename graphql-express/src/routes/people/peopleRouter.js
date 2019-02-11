@@ -9,18 +9,15 @@ router.get("/", async (_, res) => {
   const people = await Person.findAll({
     include: [{ model: Project, attributes: ["id"], through: { attributes: [] } }]
   });
-
-  // const returnArray = people
-  //   .map(p => p.get({ plain: true }))
-  //   .map(pers => {
-  //     // pers.projects = pers.projects.map(proj => {
-  //     //   delete proj.PersonProject;
-  //     //   return proj;
-  //     // });
-  //     return pers;
-  //   });
-
   res.json(people);
+});
+
+router.get("/:id", async (req, res) => {
+  const person = await Person.findByPk(req.params.id, {
+    include: [{ model: Project, attributes: ["id"], through: { attributes: [] } }]
+  });
+  if (!person) res.status(404).json({ message: "person not found" });
+  res.json(person);
 });
 
 router.post("/", async (req, res) => {

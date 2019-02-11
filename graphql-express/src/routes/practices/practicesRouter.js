@@ -9,6 +9,12 @@ router.get("/", async (_, res) => {
   res.json({ practices });
 });
 
+router.get("/:id", async (req, res) => {
+  const practice = await Practice.findByPk(req.params.id);
+  if (!practice) res.status(404).json({ message: "practice not found" });
+  res.json(practice);
+});
+
 router.post("/", async (req, res) => {
   const practice = req.body;
   const savedPractice = await Practice.create({ ...practice });

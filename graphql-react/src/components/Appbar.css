@@ -1,0 +1,27 @@
+.appbar {
+  display: flex;
+  align-items: flex-end;
+  height: 52px;
+  color: white;
+  background-color: #d72f29;
+  margin: 0px;
+}
+
+.title {
+  margin: 0px;
+  margin-left: 8px;
+  margin-right: 24px;
+  font-size: 44px;
+}
+
+.nav-tab {
+  padding: 8px;
+  font-size: 24px;
+  text-decoration: none;
+  color: white;
+  border-bottom: 2px solid #d72f29;
+}
+
+.active-route {
+  border-bottom: 2px solid white;
+}

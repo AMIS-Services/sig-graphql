@@ -3,12 +3,14 @@ import router from "./routes";
 import http from "http";
 import bodyParser from "body-parser";
 import db from "./db";
+import cors from "cors";
 
 const PORT = 3030;
 const ADRESS = "127.0.0.1";
 const app = express();
 
 db.sequelize.sync();
+app.use(cors());
 
 app.get("/", (_, res) => {
   res.send("server up, happy hacking");
