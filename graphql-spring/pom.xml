@@ -45,11 +45,25 @@
 	</dependencies>
 
 	<build>
+        <defaultGoal>spring-boot:run</defaultGoal>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<configuration>
+                    <changeLogFile>src/main/resources/config/liquibase/db.changelog.xml</changeLogFile>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>jdbc:postgresql://localhost:5432/postgres</url>
+                    <username>postgres</username>
+                    <password>postgres_password</password>
+					<!--diffTypes>data</diffTypes-->
+					<outputChangeLogFile>src/main/resources/config/liquibase/db.changelog.xml</outputChangeLogFile>
+                </configuration>               
+			</plugin> 
 		</plugins>
 	</build>
 
