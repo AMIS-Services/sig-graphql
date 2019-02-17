@@ -5,3 +5,12 @@ spring:
         username: postgres
         password: postgres_password
         driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            naming:
+                # Since hibernate 5 camelCase is converted to snake_case by default
+                # This property overwrites that default to do no conversion
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+server:
+    port: 8080
