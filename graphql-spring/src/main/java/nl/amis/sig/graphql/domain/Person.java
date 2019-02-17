@@ -9,7 +9,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -36,7 +40,9 @@ public class Person implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" }) // ignore all but ID
+    @JsonProperty("practiceId")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "`practiceId`")
     private Practice practice;
