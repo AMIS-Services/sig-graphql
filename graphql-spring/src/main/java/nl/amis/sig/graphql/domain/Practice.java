@@ -11,9 +11,7 @@ import javax.persistence.Table;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,7 +35,7 @@ public class Practice implements Serializable {
     private LocalDate updatedAt;
 
     @OneToMany(mappedBy = "practice")
-    private List<Person> people = new ArrayList<Person>();
+    private Set<Person> people = new HashSet<Person>();
 
     @ManyToMany
     @JoinTable(name = "`PracticeProject`", joinColumns = { @JoinColumn(name = "`practiceId`") }, inverseJoinColumns = {
@@ -76,11 +74,11 @@ public class Practice implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<Person> getPeople() {
+    public Set<Person> getPeople() {
         return people;
     }
 
-    public void setPeople(List<Person> people) {
+    public void setPeople(Set<Person> people) {
         this.people = people;
     }
 
