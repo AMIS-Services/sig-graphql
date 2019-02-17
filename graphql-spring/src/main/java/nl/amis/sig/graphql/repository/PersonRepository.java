@@ -2,9 +2,15 @@ package nl.amis.sig.graphql.repository;
 
 import nl.amis.sig.graphql.domain.Person;
 
-import org.springframework.data.jpa.repository.*;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, String> {
+public interface PersonRepository extends JpaRepository<Person, Integer> {
+    List<Person> findAll();
+
+    Optional<Person> findById(Integer id);
 }

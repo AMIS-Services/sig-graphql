@@ -1,6 +1,9 @@
 package nl.amis.sig.graphql.web;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +27,15 @@ public class PersonResource {
     }
 
     @GetMapping("/people")
-    public List<PersonDTO> getAll() {
-        return personMapper.toDto(personRepository.findAll());
+    public ResponseEntity<List<PersonDTO>> getAll() {
+        final List<PersonDTO> people = personMapper.toDto(personRepository.findAll());
+        return new ResponseEntity<List<PersonDTO>>(people, HttpStatus.OK);
+    }
+
+    @GetMapping("/people/{id}")
+    public ResponseEntity<PersonDTO> getOne(@PathVariable Integer id) {
+        return personRepository.findById(id)
+                .map(person -> new ResponseEntity<PersonDTO>(personMapper.toDto(person), HttpStatus.OK))
+                .orElse(new ResponseEntity<PersonDTO>(HttpStatus.NOT_FOUND));
     }
 }
