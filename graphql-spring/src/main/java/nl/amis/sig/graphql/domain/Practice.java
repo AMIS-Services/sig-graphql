@@ -9,12 +9,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "practices")
@@ -36,11 +35,9 @@ public class Practice implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "practice", "projects" }) // ignore all but ID
     @OneToMany(mappedBy = "practice") // reference Practice.java
     private Set<Person> people = new HashSet<Person>();
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PracticeProject`", joinColumns = { @JoinColumn(name = "`practiceId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`projectId`") })
@@ -115,6 +112,15 @@ public class Practice implements Serializable {
 
     @Override
     public String toString() {
-        return "Practice{" + "id=" + id + ", name='" + name + "'" + "}";
+        //@formatter:off
+        return "Person{" + 
+            "id=" + id + 
+            ", name='" + name + "'" + 
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", people=" + people.stream().map(Person::getId).collect(Collectors.toSet()) +
+            ", projects=" + projects.stream().map(Project::getId).collect(Collectors.toSet()) +
+            "}";
+        //@formatter:on
     }
 }

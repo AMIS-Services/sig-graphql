@@ -9,16 +9,11 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "people")
@@ -40,14 +35,10 @@ public class Person implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
-    @JsonProperty("practiceId")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     @JoinColumn(name = "`practiceId`")
     private Practice practice;
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`personId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`projectId`") })
@@ -122,6 +113,15 @@ public class Person implements Serializable {
 
     @Override
     public String toString() {
-        return "Person{" + "id=" + id + ", name='" + name + "'" + "}";
+        //@formatter:off
+        return "Person{" + 
+            "id=" + id + 
+            ", name='" + name + "'" + 
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", practice=" + practice.getId() +
+            ", projects=" + projects.stream().map(Project::getId).collect(Collectors.toSet()) +
+            "}";
+        //@formatter:on
     }
 }

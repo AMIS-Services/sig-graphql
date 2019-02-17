@@ -8,12 +8,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "projects")
@@ -35,13 +34,11 @@ public class Project implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "practice", "projects" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`projectId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`personId`") })
     private Set<Person> people = new HashSet<Person>();
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PracticeProject`", joinColumns = { @JoinColumn(name = "`projectId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`practiceId`") })
@@ -116,6 +113,15 @@ public class Project implements Serializable {
 
     @Override
     public String toString() {
-        return "Project{" + "id=" + id + ", name='" + name + "'" + "}";
+        //@formatter:off
+        return "Project{" + 
+            "id=" + id + 
+            ", name='" + name + "'" + 
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", people=" + people.stream().map(Person::getId).collect(Collectors.toSet()) +
+            ", practices=" + practices.stream().map(Practice::getId).collect(Collectors.toSet()) +
+            "}";
+        //@formatter:on
     }
 }

@@ -3,6 +3,9 @@ package nl.amis.sig.graphql.service.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import nl.amis.sig.graphql.domain.Person;
 import nl.amis.sig.graphql.domain.Project;
@@ -55,6 +58,7 @@ public class PracticeDTO implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "projects", "practice" })
     public Set<Person> getPeople() {
         return people;
     }
@@ -63,6 +67,7 @@ public class PracticeDTO implements Serializable {
         this.people = people;
     }
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" })
     public Set<Project> getProjects() {
         return projects;
     }
@@ -92,6 +97,15 @@ public class PracticeDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "PracticeDTO{" + "id=" + id + ", name='" + name + "'" + "}";
+        //@formatter:off
+        return "PersonDTO{" + 
+            "id=" + id + 
+            ", name='" + name + "'" + 
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", people=" + people.stream().map(Person::getId).collect(Collectors.toSet()) +
+            ", projects=" + projects.stream().map(Project::getId).collect(Collectors.toSet()) +
+            "}";
+        //@formatter:on
     }
 }
