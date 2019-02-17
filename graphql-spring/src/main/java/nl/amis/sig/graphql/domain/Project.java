@@ -7,6 +7,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -32,11 +35,13 @@ public class Project implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "practice", "projects" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`projectId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`personId`") })
     private Set<Person> people = new HashSet<Person>();
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PracticeProject`", joinColumns = { @JoinColumn(name = "`projectId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`practiceId`") })

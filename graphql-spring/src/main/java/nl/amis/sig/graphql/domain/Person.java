@@ -9,6 +9,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -34,10 +36,12 @@ public class Person implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" }) // ignore all but ID
     @ManyToOne
     @JoinColumn(name = "`practiceId`")
     private Practice practice;
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" }) // ignore all but ID
     @ManyToMany
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`personId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`projectId`") })
