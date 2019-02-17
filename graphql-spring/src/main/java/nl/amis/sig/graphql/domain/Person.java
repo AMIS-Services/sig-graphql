@@ -3,9 +3,16 @@ package nl.amis.sig.graphql.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "people")
@@ -27,8 +34,14 @@ public class Person implements Serializable {
     @Column(name = "`updatedAt`")
     private LocalDate updatedAt;
 
-    @Column(name = "`practiceId`")
-    private Integer practiceId;
+    @ManyToOne
+    @JoinColumn(name = "`practiceId`")
+    private Practice practice;
+
+    @ManyToMany
+    @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`personId`") }, inverseJoinColumns = {
+            @JoinColumn(name = "`projectId`") })
+    private Set<Project> projects = new HashSet<Project>();
 
     public Integer getId() {
         return id;
@@ -62,12 +75,20 @@ public class Person implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Integer getPracticeId() {
-        return practiceId;
+    public Practice getPractice() {
+        return practice;
     }
 
-    public void setPracticeId(Integer practiceId) {
-        this.practiceId = practiceId;
+    public void setPractice(Practice practice) {
+        this.practice = practice;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjets(Set<Project> projects) {
+        this.projects = projects;
     }
 
     @Override
