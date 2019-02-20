@@ -1,10 +1,10 @@
 import express from "express";
 import db from "../../db";
 
-const Person = db.person;
-const Project = db.project;
-const Practice = db.practice;
 const router = express.Router();
+const Person = db.person;
+const Practice = db.practice;
+const Project = db.project;
 const include = [
   { model: Project, attributes: ["id"], through: { attributes: [] } },
   { model: Practice, attributes: ["id"] }

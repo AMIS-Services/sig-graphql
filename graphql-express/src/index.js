@@ -4,6 +4,7 @@ import http from "http";
 import bodyParser from "body-parser";
 import db from "./db";
 import cors from "cors";
+import schema from "./schema";
 
 const PORT = 3030;
 const ADRESS = "127.0.0.1";
@@ -19,6 +20,7 @@ app.get("/", (_, res) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use("/api", router);
+schema.applyMiddleware({ app, path: "/api/graphql" });
 
 http.createServer(app).listen(PORT, ADRESS, () => {
   console.log(`server up at ${ADRESS}:${PORT}`);
