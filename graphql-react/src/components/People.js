@@ -6,7 +6,6 @@ class People extends React.Component {
 
   async componentDidMount() {
     const people = await fetch("/people");
-
     const enrichedPeople = await Promise.all(
       people.map(async person => {
         const projects = await Promise.all(
@@ -14,7 +13,7 @@ class People extends React.Component {
         );
         person.projects = projects;
 
-        const practice = await fetch(`/practices/${person.practiceId}`);
+        const practice = await fetch(`/practices/${person.practice.id}`);
         person.practice = practice;
         return person;
       })

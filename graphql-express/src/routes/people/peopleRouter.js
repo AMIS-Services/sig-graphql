@@ -3,8 +3,12 @@ import db from "../../db";
 
 const Person = db.person;
 const Project = db.project;
+const Practice = db.practice;
 const router = express.Router();
-const include = [{ model: Project, attributes: ["id"], through: { attributes: [] } }];
+const include = [
+  { model: Project, attributes: ["id"], through: { attributes: [] } },
+  { model: Practice, attributes: ["id"] }
+];
 
 router.get("/", async (_, res) => {
   const people = await Person.findAll({ include });
