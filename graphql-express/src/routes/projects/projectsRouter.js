@@ -1,11 +1,15 @@
 import express from "express";
 import db from "../../db";
 
+const Practice = db.practice;
 const Project = db.project;
 const Person = db.person;
 const router = express.Router();
 
-const include = [{ model: Person, attributes: ["id"], through: { attributes: [] } }];
+const include = [
+  { model: Person, attributes: ["id"], through: { attributes: [] } },
+  { model: Practice, attributes: ["id"], through: { attributes: [] } }
+];
 router.get("/", async (_, res) => {
   const projects = await Project.findAll({ include });
   res.json(projects);
