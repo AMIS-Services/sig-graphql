@@ -1,3 +1,7 @@
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+
 const handleResponse = response => {
   if (!response.ok) {
     console.error(`ERROR ${response.status}: ${response.statusText}`);
@@ -15,3 +19,8 @@ export const fetch = (path, options = {}) => {
     .then(handleResponse)
     .catch(error => console.error(`Network error: ${error}`));
 };
+
+export const graphqlClient = new ApolloClient({
+  link: new HttpLink({ uri: "http://localhost:3030/api/graphql" }),
+  cache: new InMemoryCache()
+});
