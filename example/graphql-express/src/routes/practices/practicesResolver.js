@@ -20,3 +20,11 @@ export const practicesProjectsResolver = async practice => {
   const fullPractice = await Practice.findByPk(practice.id, { include: [{ model: Project }] });
   return fullPractice.projects;
 };
+
+export const updatePracticeResolver = async (_, { practice }) => {
+  const [__, [updatedPractice]] = await Practice.update(practice, {
+    where: { id: practice.id },
+    returning: true
+  });
+  return updatedPractice;
+};

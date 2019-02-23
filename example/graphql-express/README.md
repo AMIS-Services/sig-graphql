@@ -42,6 +42,7 @@ const typeDefs = gql`
 `;
 ```
 
+This `String` is one of the scalar types in GraphQL. [Read more about scalars here.](https://graphql.org/learn/schema/)
 Time to create the resolver which will power our hello query. Add them as follows:
 
 ```javascript
@@ -75,7 +76,7 @@ query {
 }
 ```
 
-There you go, you now know how to use GraphQL! Kinda.
+There you go, you now know how to use GraphQL! Kinda...
 
 ### Step 2: Expanding the schema
 
@@ -154,6 +155,27 @@ See if you can also add a nested resolver for projects.
 Now that we have a nice resolver with nested subresolvers we have everything we need to update our front-end practices component from REST to GraphQL. Go on over to the README in the react folder and get started.
 
 ### Step 8: Mutations
+
+One core aspect having a functional API remains. We can currently read data, but we have no way to modify our date. In order to do this, we will introduce [mutations](https://graphql.org/learn/queries/#mutations). In order to add a mutation we must update our type definitions and add a resolver.
+
+If we want to pass something as an input, it must be an input type. The scalar types are already input, but if we want to pass an object we must create a new typing for it first. Add the following typing to your typeDefs:
+
+```javascript
+input PracticeInput {
+  id: Int!
+  name: String
+}
+```
+
+The exclamation mark after the id signifies that is required, since we need it to look up our practice in the database. Now add your mutation, with its input and the type it returns to your typeDefs:
+
+```javascript
+type Mutation {
+  updatePractice(practice: PracticeInput!): Practice
+}
+```
+
+Now all we need to do is add our resolver and we're golden! Go to your `src/routes/practices/practicesResolver.js` file and declare a new resolver called `updatePracticeResolver`. Assign an async function to it, which takes similar parameters as the practiceResolver, but instead of an `id` it takes the whole practice: `(_, {practice})`. Take a look at how practices are updated in the practicesRouter and implement a solution similar to that. Return the updated practice.
 
 - caching
 - subscriptions

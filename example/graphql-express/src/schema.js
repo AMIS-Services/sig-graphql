@@ -3,7 +3,8 @@ import peopleResolver from "./routes/people/peopleResolver";
 import {
   practicesResolver,
   practicesPeopleResolver,
-  practicesProjectsResolver
+  practicesProjectsResolver,
+  updatePracticeResolver
 } from "./routes/practices/practicesResolver";
 
 const typeDefs = gql`
@@ -20,6 +21,11 @@ const typeDefs = gql`
     projects: [Project]
   }
 
+  input PracticeInput {
+    id: Int!
+    name: String
+  }
+
   type Project {
     id: Int
     name: String
@@ -29,12 +35,19 @@ const typeDefs = gql`
     people(id: Int): [Person]
     practices(ids: [Int]): [Practice]
   }
+
+  type Mutation {
+    updatePractice(practice: PracticeInput!): Practice
+  }
 `;
 
 const resolvers = {
   Query: {
     people: peopleResolver,
     practices: practicesResolver
+  },
+  Mutation: {
+    updatePractice: updatePracticeResolver
   },
   Practice: {
     people: practicesPeopleResolver,

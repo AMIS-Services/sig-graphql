@@ -74,7 +74,7 @@ const query = gql`
 `;
 ```
 
-This query will grab all the data from the practices resolver and the nested resolvers which we just implemented in the backend. Now we need some code to execute this query.
+This query will grab all the data from the practices resolver and the nested resolvers which we just implemented in the backend. This is a very simple query, read about [all kinds of cool stuff you can do with queries here](https://graphql.org/learn/queries/) Now we need some code to execute this query.
 
 Import the `Query` component from "react-apollo" and rewrite the render function to implement it. The Query component is a renderProps component, which means that it takes a function as child in the following style:
 
