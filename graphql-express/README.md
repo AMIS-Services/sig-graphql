@@ -121,7 +121,37 @@ We want to be able to look for specific practices on this resolver as well, so l
 
 One of the nicest features of GraphQL is the ability to query nested resolvers. These resolvers can return data on associated objects, but will only be called when the query needs them to be called. So if the data from the nested resolvers is not needed, no time will be wasted on resolving it.
 
+Create a new resolver in `src/routes/practices/practicesResolver.js` called `practicesPeopleResolver`. This should be an async function, so that we can use `await`. For example:
+
+```javascript
+export const practicesPeopleResolver = async () => {
+  const something = await someFunction();
+};
+```
+
+This time, we do want to use the first parameter for the resolver, which is the practice passed from the parent resolver. We want to return the people associated with the practice, so we need to query them from the database. This can be done by using
+`Practice.findByPk(practice.id, { include: [{ model: Person }] });`. Get the people array and return it.
+
+Add the subresolver for people to practices in `src/schema.js` like so:
+
+```javascript
+const resolvers = {
+  Query: {
+    people: peopleResolver,
+    practices: practicesResolver
+  },
+  Practice: {
+    people: practicesPeopleResolver
+  }
+};
+```
+
+Go to [localhost:3030/api/graphql](localhost:3030/api/grapqhl) and expand your query with a request for the nested people. Pretty cool, huh?
+See if you can also add a nested resolver for projects.
+
 ### Step 7: Front-end intermezzo
+
+Now that we have a nice resolver with nested subresolvers we have everything we need to update our front-end practices component from REST to GraphQL. Go on over to the README in the react folder and get started.
 
 ### Step 8: Mutations
 
