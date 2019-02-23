@@ -29,12 +29,9 @@ router.post("/", async (req, res) => {
 
 router.patch("/:id", async (req, res) => {
   const person = req.body;
-
-  const affectedLines = await Person.update(person, { where: { id: req.params.id } });
-  if (affectedLines[0] !== 1) res.status(400).json({ message: "bad request" });
-
-  const savedPerson = await Person.findByPk(req.params.id, include);
-  res.json(savedPerson);
+  const [_, [updatedPerson]] = await Person.update(person, { where: { id: req.params.id }, update: true });
+  if (!updatedPerson) res.status(400).json({ message: "bad request" });
+  res.json(updatedPerson);
 });
 
 export default router;

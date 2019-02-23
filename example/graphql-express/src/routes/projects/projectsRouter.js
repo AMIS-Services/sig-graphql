@@ -21,4 +21,17 @@ router.get("/:id", async (req, res) => {
   res.json(project);
 });
 
+router.patch("/:id", async (req, res) => {
+  const project = req.body;
+
+  const affectedLines = await Project.update(project, {
+    where: { id: req.params.id },
+    include: [{ model: Person }, { model: Project }]
+  });
+  if (affectedLines[0] !== 1) res.status(400).json({ message: "bad request" });
+
+  const savedProject = await Project.findByPk(req.params.id, { include });
+  res.json(savedProject);
+});
+
 export default router;

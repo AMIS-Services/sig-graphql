@@ -1,6 +1,7 @@
 import express from "express";
 import db from "../../db";
 
+const Op = db.sequelize.Op;
 const Practice = db.practice;
 const Person = db.person;
 const Project = db.project;
@@ -30,11 +31,24 @@ router.post("/", async (req, res) => {
 router.patch("/:id", async (req, res) => {
   const practice = req.body;
 
-  const affectedLines = await Practice.update(practice, { where: { id: req.params.id } });
-  if (affectedLines[0] !== 1) res.status(400).json({ message: "bad request" });
+  const [_, [updatedPractice]] = await Practice.update(practice, {
+    where: { id: req.params.id },
+    returning: true
+  });
+  if (!updatedPractice) res.status(400).json({ message: "bad request" });
 
-  const savedPractice = await Practice.findById(req.params.id, { include });
-  res.json(savedPractice);
+  if (practice.projects) {
+    const projects = await Project.findAll({ where: { id: { [Op.or]: practice.projects.map(proj => proj.id) } } });
+    await updatedPractice.setProjects(projects);
+  }
+
+  if (practice.people) {
+    const people = await Person.findAll({ where: { id: { [Op.or]: practice.people.map(pers => pers.id) } } });
+    await updatedPractice.setPeople(people);
+  }
+
+  const practiceWithAssociations = await Practice.findByPk(req.params.id, { include });
+  res.json(practiceWithAssociations);
 });
 
 export default router;
