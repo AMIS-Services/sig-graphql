@@ -1,6 +1,6 @@
 # Express + GraphQL
 
-This is the express project for the GraphQL SIG. Express is the most popular framework for node. The project can be run in its current form by running the steps under [getting started](#getting-started) as a REST API against which the (react) front-end can perform its queries.
+This is the express project for the GraphQL SIG. Express is the most popular framework for node. The project can be ran in its current form by executing the steps under [getting started](#getting-started) as a REST API against which the (react) front-end can perform its queries.
 The project contains 3 rest endpoints which can be found at `localhost:3030/api/people`, `localhost:3030/api/practices` and `localhost:3030/api/projects`.
 Going through the [hands-on](#hands-on) steps will let you get some practical experience with GraphQL.
 
@@ -8,7 +8,7 @@ Instead of basic GraphQL we will be using Apollo GraphQL for this tutorial. Apol
 
 ## Getting started
 
-Before you get started,make sure you have docker installed, running and are able to run a postgres image (`docker run postgres`).
+Before you get started,make sure you have docker installed, running and are able to run a postgres image (`docker run postgres`). You will also need node (8+).
 
 In order to run the project, execute these steps in the express root folder:
 
@@ -46,10 +46,10 @@ Time to create the resolver which will power our hello query. Add them as follow
 
 ```javascript
 const resolvers = {
-    Query: {
-        hello: () => 'Hello world!
-    }
-}
+  Query: {
+    hello: () => "Hello world!"
+  }
+};
 ```
 
 Now that we have our type definitions and resolvers we can create our middleware. Import `ApolloServer` from 'apollo-server-express' and add the following code block.
@@ -149,7 +149,7 @@ const resolvers = {
 Go to [localhost:3030/api/graphql](localhost:3030/api/grapqhl) and expand your query with a request for the nested people. Pretty cool, huh?
 See if you can also add a nested resolver for projects.
 
-### Step 7: Front-end intermezzo
+### Step 7: To the front-end!
 
 Now that we have a nice resolver with nested subresolvers we have everything we need to update our front-end practices component from REST to GraphQL. Go on over to the README in the react folder and get started.
 

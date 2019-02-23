@@ -13,6 +13,7 @@ class Frame extends React.Component {
         <Appbar />
         <Switch>
           <Route exact path="/" component={People} />
+          <Route path="/people" component={People} />
           <Route path="/practices" component={Practices} />
           <Route path="/projects" component={Projects} />
         </Switch>

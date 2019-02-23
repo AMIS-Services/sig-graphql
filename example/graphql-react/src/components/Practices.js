@@ -1,14 +1,12 @@
 import React from "react";
-import { Query } from "react-apollo";
 import gql from "graphql-tag";
+import GraphlQuery from "./GraphqlQuery";
 
 export default class Practices extends React.Component {
   render() {
     return (
-      <Query query={query} variables={{ ids: [1] }}>
-        {({ loading, error, data }) => {
-          if (loading) return <p>loading...</p>;
-          if (error) return null;
+      <GraphlQuery query={query} variables={{ ids: [1] }}>
+        {data => {
           return (
             <div className="card-container">
               {data.practices.map(practice => (
@@ -35,7 +33,7 @@ export default class Practices extends React.Component {
             </div>
           );
         }}
-      </Query>
+      </GraphlQuery>
     );
   }
 }

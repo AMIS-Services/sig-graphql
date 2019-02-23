@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Router } from "react-router-dom";
 import Frame from "./components/Frame";
 import { ApolloProvider } from "react-apollo";
+import { graphqlClient } from "./common/fetch.js";
 import createHistory from "history/createBrowserHistory";
 import "./App.css";
-import { graphqlClient } from "./common/fetch.js";
 
 const browserHistory = createHistory();
 

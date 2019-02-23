@@ -8,7 +8,7 @@ class Appbar extends React.Component {
     return (
       <div className="appbar">
         <h1 className="title">AMIS</h1>
-        <Link className={`nav-tab ${path === "/" ? "active-route" : null}`} to="/">
+        <Link className={`nav-tab ${path === "/" || path === "/people" ? "active-route" : null}`} to="/people">
           People
         </Link>
         <Link className={`nav-tab ${path === "/practices" ? "active-route" : null}`} to="/practices">
