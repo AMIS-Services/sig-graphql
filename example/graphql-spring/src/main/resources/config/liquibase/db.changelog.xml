@@ -1,13 +1,10 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="chiel_h (generated)" id="1550319357063-0">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
+    </changeSet>
     <changeSet author="chiel_h (generated)" id="1550319357063-1">
         <createTable tableName="PersonProject">
-            <column name="createdAt" type="TIMESTAMP WITH TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updatedAt" type="TIMESTAMP WITH TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
             <column name="personId" type="INTEGER">
                 <constraints primaryKey="true" primaryKeyName="PersonProject_pkey"/>
             </column>
@@ -18,12 +15,6 @@
     </changeSet>
     <changeSet author="chiel_h (generated)" id="1550319357063-2">
         <createTable tableName="PracticeProject">
-            <column name="createdAt" type="TIMESTAMP WITH TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updatedAt" type="TIMESTAMP WITH TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
             <column name="practiceId" type="INTEGER">
                 <constraints primaryKey="true" primaryKeyName="PracticeProject_pkey"/>
             </column>
@@ -77,28 +68,20 @@
     </changeSet>
     <changeSet author="chiel_h (generated)" id="1550319904124-1">
         <insert tableName="PersonProject">
-            <column name="createdAt" valueDate="2019-02-16T13:24:31.368"/>
-            <column name="updatedAt" valueDate="2019-02-16T13:24:31.368"/>
             <column name="personId" valueNumeric="2"/>
             <column name="projectId" valueNumeric="1"/>
         </insert>
         <insert tableName="PersonProject">
-            <column name="createdAt" valueDate="2019-02-16T13:24:31.371"/>
-            <column name="updatedAt" valueDate="2019-02-16T13:24:31.371"/>
             <column name="personId" valueNumeric="3"/>
             <column name="projectId" valueNumeric="1"/>
         </insert>
     </changeSet>
     <changeSet author="chiel_h (generated)" id="1550319904124-2">
         <insert tableName="PracticeProject">
-            <column name="createdAt" valueDate="2019-02-16T13:24:31.373"/>
-            <column name="updatedAt" valueDate="2019-02-16T13:24:31.373"/>
             <column name="practiceId" valueNumeric="1"/>
             <column name="projectId" valueNumeric="1"/>
         </insert>
         <insert tableName="PracticeProject">
-            <column name="createdAt" valueDate="2019-02-16T13:24:31.375"/>
-            <column name="updatedAt" valueDate="2019-02-16T13:24:31.375"/>
             <column name="practiceId" valueNumeric="2"/>
             <column name="projectId" valueNumeric="1"/>
         </insert>

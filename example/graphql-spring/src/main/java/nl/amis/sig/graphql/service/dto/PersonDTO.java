@@ -2,9 +2,12 @@ package nl.amis.sig.graphql.service.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import nl.amis.sig.graphql.domain.Practice;
@@ -18,13 +21,17 @@ public class PersonDTO implements Serializable {
 
     private String name;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate updatedAt;
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" })
     private Practice practice;
 
-    private Set<Project> projects;
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" })
+    private Set<Project> projects = new HashSet<Project>();
 
     public Integer getId() {
         return id;
@@ -58,7 +65,6 @@ public class PersonDTO implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" })
     public Practice getPractice() {
         return practice;
     }
@@ -67,7 +73,6 @@ public class PersonDTO implements Serializable {
         this.practice = practice;
     }
 
-    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" })
     public Set<Project> getProjects() {
         return projects;
     }
@@ -103,7 +108,7 @@ public class PersonDTO implements Serializable {
             ", name='" + name + "'" + 
             ", createdAt=" + createdAt +
             ", updatedAt=" + updatedAt +
-            ", practice=" + practice.getId() +
+            ", practice=" + Optional.ofNullable(practice).map(Practice::getId).orElse(null) +
             ", projects=" + projects.stream().map(Project::getId).collect(Collectors.toSet()) +
             "}";
         //@formatter:on

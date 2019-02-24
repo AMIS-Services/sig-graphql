@@ -13,6 +13,7 @@ spring:
         password: postgres_password
         driver-class-name: org.postgresql.Driver
     jpa:
+        show-sql: true
         hibernate:
             naming:
                 # Since hibernate 5 camelCase is converted to snake_case by default
@@ -26,4 +27,4 @@ spring:
                     use_jdbc_metadata_defaults: false
 
 server:
-    port: 8080
+    port: 3030

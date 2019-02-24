@@ -11,6 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 
+/**
+ * This aspect is applied using the
+ * nl.amis.sig.graphql.configLoggingAspectConfiguration. It wraps around all
+ * methods that satisfy the pointcuts and adds debug logging to provide insight
+ * in the values of the objects entering and exiting the methods.
+ */
 @Aspect
 public class LoggingAspect {
 

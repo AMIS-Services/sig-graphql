@@ -2,6 +2,7 @@ package nl.amis.sig.graphql.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -9,9 +10,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,24 +27,25 @@ public class Person implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     private String name;
 
-    // databases usually are case-insensitive
-    // apparently hibernate interprets column names that way
-    // use backticks to interpret column names as-is
-    @Column(name = "`createdAt`")
+    @Column(name = "`createdAt`") // this postgresql column is case-sensitive
+    @CreationTimestamp
     private LocalDate createdAt;
 
-    @Column(name = "`updatedAt`")
+    @Column(name = "`updatedAt`") // this postgresql column is case-sensitive
+    @UpdateTimestamp
     private LocalDate updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "`practiceId`")
+    @JoinColumn(name = "`practiceId`") // this postgresql column is case-sensitive
     private Practice practice;
 
     @ManyToMany
+    // these postgresql table and columns are case-sensitive
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`personId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`projectId`") })
     private Set<Project> projects = new HashSet<Project>();
@@ -88,7 +94,7 @@ public class Person implements Serializable {
         return projects;
     }
 
-    public void setProjets(Set<Project> projects) {
+    public void setProjects(Set<Project> projects) {
         this.projects = projects;
     }
 
@@ -119,7 +125,7 @@ public class Person implements Serializable {
             ", name='" + name + "'" + 
             ", createdAt=" + createdAt +
             ", updatedAt=" + updatedAt +
-            ", practice=" + practice.getId() +
+            ", practice=" + Optional.ofNullable(practice).map(Practice::getId).orElse(null) +
             ", projects=" + projects.stream().map(Project::getId).collect(Collectors.toSet()) +
             "}";
         //@formatter:on
