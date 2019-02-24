@@ -20,11 +20,59 @@ Run the project and try some get-requests with Postman:
 - `localhost:3030/api/practices`
 - `localhost:3030/api/projects`
 
-Each request generates debug logging with the objects that are used to enter or exit a method. This is done using the LoggingAspect, which is applied using the LoggingAspectConfiguration (src/main/java/nl/amis/sig/graphql /aop/logging and /config respectively).
-
 ## Hands on
 
 ### Step 1: Hello world
+
+After you get the project running, you can start the transformation to graphQL by including the following dependencies:
+
+```xml
+<!--GraphQL-Java Tools - Loads and powers our GraphQL schema-->
+<dependency>
+    <groupId>com.graphql-java</groupId>
+    <artifactId>graphql-java-tools</artifactId>
+    <version>5.2.4</version>
+</dependency>
+<!--GraphQL-Java Spring boot starter for GraphQL - hosts our schema at the /graphql endpoint in our spring context-->
+<dependency>
+    <groupId>com.graphql-java</groupId>
+    <artifactId>graphql-spring-boot-starter</artifactId>
+    <version>5.0.2</version>
+</dependency>
+<!--GraphQL-Java Spring boot starter for GraphIQL - a web based UI for interacting with the /graphql endpoint, with knowledge of the schema at the endpoint-->
+<dependency>
+    <groupId>com.graphql-java</groupId>
+    <artifactId>graphiql-spring-boot-starter</artifactId>
+    <version>5.0.2</version>
+</dependency>
+```
+
+The application is configured to search for graphql schema files on the classpath with extension `.graphqls`. Let's add a simple schema file with the following content:
+
+```text
+type Query {
+    hello: String
+}
+```
+
+This schema defines the `hello` query, which returns a String.
+
+The application is configured to search for graphql resolvers on the classpath, java classes that implement `GraphQLQueryResolver` and are annotated with `@Controller`. You may have multiple java classes like this, but the queries defined in the graphql schema must and may only exist once among those java classes. 
+Create a new java class that implements `GraphQLQueryResolver`, is annotated with `@Controller` and has a public method called `hello()` returning a String - for instance "Hello world!".
+
+Now run the application and try the hello-query.
+In Postman you could do the following POST to `http://localhost:3030/graphql`:
+```javascript
+{
+	"query": "{ hello }"
+}
+``` 
+Alternatively use graphiQL in the browser at `http://localhost:3030/graphiql`. This is a web based UI for interacting with the /graphql endpoint. Note that it is (over)simplified; the queries are not valid json. Use for example:
+```javascript
+{
+	hello
+}
+``` 
 
 ### Step 2: Expanding the schema
 
