@@ -4,7 +4,7 @@ import definePractice from "./routes/practices/practiceEntity";
 import defineProject from "./routes/projects/projectEntity";
 
 const sequelize = new Sequelize("postgres://postgres:postgres_password@localhost:5432/postgres", {
-  define: { timestaps: false }
+  define: { timestamps: false }
 });
 
 const db = {};
