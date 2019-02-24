@@ -5,11 +5,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import nl.amis.sig.graphql.domain.Practice;
 import nl.amis.sig.graphql.domain.Project;
@@ -62,9 +58,6 @@ public class PersonDTO implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    @JsonProperty("practiceId")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
     @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "projects" })
     public Practice getPractice() {
         return practice;
