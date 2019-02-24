@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.amis.sig.graphql.domain.Project;
 import nl.amis.sig.graphql.repository.ProjectRepository;
@@ -11,6 +12,7 @@ import nl.amis.sig.graphql.service.dto.ProjectDTO;
 import nl.amis.sig.graphql.service.mapper.ProjectMapper;
 
 @Service
+@Transactional
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -22,10 +24,12 @@ public class ProjectService {
         this.projectMapper = projectMapper;
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectDTO> getProjects() {
         return projectMapper.toDto(projectRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Optional<ProjectDTO> getProject(Integer id) {
         return projectRepository.findById(id).map(project -> projectMapper.toDto(project));
     }
@@ -49,10 +53,10 @@ public class ProjectService {
         }).map(projectMapper::toDto);
     }
 
-    public Optional<Project> deleteProject(Integer id) {
+    public Optional<Integer> deleteProject(Integer id) {
         return projectRepository.findById(id).map(project -> {
             projectRepository.delete(project);
-            return project;
+            return project.getId();
         });
     }
 }

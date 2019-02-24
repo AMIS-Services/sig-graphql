@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.amis.sig.graphql.domain.Practice;
 import nl.amis.sig.graphql.repository.PracticeRepository;
@@ -11,6 +12,7 @@ import nl.amis.sig.graphql.service.dto.PracticeDTO;
 import nl.amis.sig.graphql.service.mapper.PracticeMapper;
 
 @Service
+@Transactional
 public class PracticeService {
 
     private final PracticeRepository practiceRepository;
@@ -22,10 +24,12 @@ public class PracticeService {
         this.practiceMapper = practiceMapper;
     }
 
+    @Transactional(readOnly = true)
     public List<PracticeDTO> getPractices() {
         return practiceMapper.toDto(practiceRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Optional<PracticeDTO> getPractice(Integer id) {
         return practiceRepository.findById(id).map(practice -> practiceMapper.toDto(practice));
     }
@@ -49,10 +53,10 @@ public class PracticeService {
         }).map(practiceMapper::toDto);
     }
 
-    public Optional<Practice> deletePractice(Integer id) {
+    public Optional<Integer> deletePractice(Integer id) {
         return practiceRepository.findById(id).map(practice -> {
             practiceRepository.delete(practice);
-            return practice;
+            return practice.getId();
         });
     }
 }

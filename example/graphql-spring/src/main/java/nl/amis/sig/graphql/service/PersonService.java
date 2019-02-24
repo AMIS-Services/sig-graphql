@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import nl.amis.sig.graphql.domain.Person;
 import nl.amis.sig.graphql.repository.PersonRepository;
@@ -11,6 +12,7 @@ import nl.amis.sig.graphql.service.dto.PersonDTO;
 import nl.amis.sig.graphql.service.mapper.PersonMapper;
 
 @Service
+@Transactional
 public class PersonService {
     private final PersonRepository personRepository;
 
@@ -21,10 +23,12 @@ public class PersonService {
         this.personMapper = personMapper;
     }
 
+    @Transactional(readOnly = true)
     public List<PersonDTO> getPeople() {
         return personMapper.toDto(personRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Optional<PersonDTO> getPerson(Integer id) {
         return personRepository.findById(id).map(person -> personMapper.toDto(person));
     }
@@ -48,10 +52,10 @@ public class PersonService {
         }).map(personMapper::toDto);
     }
 
-    public Optional<Person> deletePerson(Integer id) {
+    public Optional<Integer> deletePerson(Integer id) {
         return personRepository.findById(id).map(person -> {
             personRepository.delete(person);
-            return person;
+            return person.getId();
         });
     }
 }
