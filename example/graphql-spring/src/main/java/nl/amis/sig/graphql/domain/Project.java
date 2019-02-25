@@ -2,11 +2,15 @@ package nl.amis.sig.graphql.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,20 +25,21 @@ public class Project implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue
     private Integer id;
 
     private String name;
 
-    // databases usually are case-insensitive
-    // apparently hibernate interprets column names that way
-    // use backticks to interpret column names as-is
-    @Column(name = "`createdAt`")
+    @Column(name = "`createdAt`") // this postgresql column is case-sensitive
+    @CreationTimestamp
     private LocalDate createdAt;
 
-    @Column(name = "`updatedAt`")
+    @Column(name = "`updatedAt`") // this postgresql column is case-sensitive
+    @UpdateTimestamp
     private LocalDate updatedAt;
 
     @ManyToMany
+    // these postgresql table and columns are case-sensitive
     @JoinTable(name = "`PersonProject`", joinColumns = { @JoinColumn(name = "`projectId`") }, inverseJoinColumns = {
             @JoinColumn(name = "`personId`") })
     private Set<Person> people = new HashSet<Person>();
