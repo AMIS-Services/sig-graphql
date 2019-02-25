@@ -177,6 +177,20 @@ type Mutation {
 
 Now all we need to do is add our resolver and we're golden! Go to your `src/routes/practices/practicesResolver.js` file and declare a new resolver called `updatePracticeResolver`. Assign an async function to it, which takes similar parameters as the practiceResolver, but instead of an `id` it takes the whole practice: `(_, {practice})`. Take a look at how practices are updated in the practicesRouter and implement a solution similar to that. Return the updated practice.
 
-- caching
-- subscriptions
-- extra external rest endpoint
+### Step 9: Exception handling
+
+Exception handling is an import part of every application, GraphQL API's are no exception. Apollo includes [some options and pre-defined errors](https://www.apollographql.com/docs/apollo-server/features/errors.html), such as disabling stack-tracing on production and things like `AuthenticationError` and `UserInputError`.
+
+Let's add an extra resolver with a `name` input to projects. Create a file `src/routes/projects/projectsResolver.js` and export a resolver called projectsResolver. This resolver should accept a name as argument. If `/[^\a-zA-Z \-]/.test(name)` is true, a non-letter character is in the name and the name should be rejected. Have the resolver throw a UserInputError. Feel free to add a descriptive message. Add the projects query to your typeDefs and add the resolver to your resolvers. Go to [localhost:3030/api/graphql](localhost:3030/api/grapqhl) and try out your new resolver without an input, with a correct name and with a malformed name.
+
+### Step 10: Subscriptions
+
+## Extra reading
+
+[Authentication & authorization](https://www.apollographql.com/docs/apollo-server/features/authentication.html)
+
+[Monitoring & metrics](https://www.apollographql.com/docs/apollo-server/features/metrics.html)
+
+[Testing](https://www.apollographql.com/docs/apollo-server/features/testing.html)
+
+[Pagination](https://graphql.org/learn/pagination/)

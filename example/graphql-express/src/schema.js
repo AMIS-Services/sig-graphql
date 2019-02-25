@@ -6,6 +6,7 @@ import {
   practicesProjectsResolver,
   updatePracticeResolver
 } from "./routes/practices/practicesResolver";
+import { projectsResolver } from "./routes/projects/projectsResolver";
 
 const typeDefs = gql`
   type Person {
@@ -34,6 +35,7 @@ const typeDefs = gql`
   type Query {
     people(id: Int): [Person]
     practices(ids: [Int]): [Practice]
+    projects(name: String): [Project]
   }
 
   type Mutation {
@@ -44,7 +46,8 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     people: peopleResolver,
-    practices: practicesResolver
+    practices: practicesResolver,
+    projects: projectsResolver
   },
   Mutation: {
     updatePractice: updatePracticeResolver

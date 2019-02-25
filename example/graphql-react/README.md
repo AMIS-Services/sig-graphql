@@ -88,6 +88,8 @@ Import the `Query` component from "react-apollo" and rewrite the render function
 
 Decide on what you want to do with the loading and error parameters. `console.log()` the data to see what the data structure is like and rewrite the JSX away from the `this.state` based data management.
 
+Once you have implemented your solution, open the network tab of your console and go to the 'people' page and back to 'practices' a couple of times. You'll notice that the queries on the peoples page keep being executed, but the GraphQL query is only done once. This is because we implement the `InMemoryCache` in Apollo, it automatically takes care of caching for us. Nice!
+
 ### Step 3: Inputs and variables
 
 Now that we are consuming our GraphQL API, we want some more freedom than just selecting which fields we want to fetch. We want to be able to use our inputs! Lets get to work on adding our `ids` input which we implemented in our backend. We can add the inputs just as we did when trying them out on the webpage provided by the webpage, for example `practices(ids: 1)`, but that does not give us a lot of flexibility, does it?. What we really want is to be able to use variables.
@@ -120,3 +122,5 @@ While having the flexibility of implementing different load and error options ev
 ### Step 5: Return to the back-end
 
 Alright, that was it for the front-end for now. Return to where you left off in your back-end project and continue with the next step.
+
+- caching
