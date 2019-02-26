@@ -16,6 +16,7 @@ import nl.amis.sig.graphql.domain.Project;
 import nl.amis.sig.graphql.repository.PersonRepository;
 import nl.amis.sig.graphql.repository.PracticeRepository;
 import nl.amis.sig.graphql.repository.ProjectRepository;
+import nl.amis.sig.graphql.web.errors.NameAlreadyUsedException;
 
 @Component
 @Transactional
@@ -33,6 +34,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Person createPerson(String name, Integer practiceId, List<Integer> projectIds) {
+        if (personRepository.findByName(name).isPresent()) {
+            throw new NameAlreadyUsedException(name);
+        }
         Person person = new Person();
         person.setName(name);
         person.setCreatedAt(LocalDate.now());
@@ -57,6 +61,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Optional<Person> updatePerson(Integer personId, String name, Integer practiceId, List<Integer> projectIds) {
+        if (personRepository.findByName(name).map(Person::getId).orElse(-1) == personId) {
+            throw new NameAlreadyUsedException(name);
+        }
         return personRepository.findById(personId).map(person -> {
             person.setName(name);
             person.setUpdatedAt(LocalDate.now());
@@ -88,6 +95,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Practice createPractice(String name, List<Integer> personIds, List<Integer> projectIds) {
+        if (practiceRepository.findByName(name).isPresent()) {
+            throw new NameAlreadyUsedException(name);
+        }
         Practice practice = new Practice();
         practice.setName(name);
         practice.setCreatedAt(LocalDate.now());
@@ -114,8 +124,11 @@ public class MutationResolver implements GraphQLMutationResolver {
         return practice;
     }
 
-    public Optional<Practice> updatepractice(Integer practiceId, String name, List<Integer> personIds,
+    public Optional<Practice> updatePractice(Integer practiceId, String name, List<Integer> personIds,
             List<Integer> projectIds) {
+        if (practiceRepository.findByName(name).map(Practice::getId).orElse(-1) == practiceId) {
+            throw new NameAlreadyUsedException(name);
+        }
         return practiceRepository.findById(practiceId).map(practice -> {
             practice.setName(name);
             practice.setUpdatedAt(LocalDate.now());
@@ -150,6 +163,9 @@ public class MutationResolver implements GraphQLMutationResolver {
     }
 
     public Project createProject(String name, List<Integer> personIds, List<Integer> practiceIds) {
+        if (projectRepository.findByName(name).isPresent()) {
+            throw new NameAlreadyUsedException(name);
+        }
         Project project = new Project();
         project.setName(name);
         project.setCreatedAt(LocalDate.now());
@@ -178,6 +194,9 @@ public class MutationResolver implements GraphQLMutationResolver {
 
     public Optional<Project> updateProject(Integer projectId, String name, List<Integer> personIds,
             List<Integer> practiceIds) {
+        if (projectRepository.findByName(name).map(Project::getId).orElse(-1) == projectId) {
+            throw new NameAlreadyUsedException(name);
+        }
         return projectRepository.findById(projectId).map(project -> {
             project.setName(name);
             project.setUpdatedAt(LocalDate.now());

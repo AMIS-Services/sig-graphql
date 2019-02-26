@@ -14,6 +14,8 @@ public interface PracticeRepository extends JpaRepository<Practice, Integer> {
 
     Optional<Practice> findById(Integer id);
 
+    Optional<Practice> findByName(String name);
+
     Optional<Practice> findByPeople_Id(Integer personId);
 
     List<Practice> findByProjects_Id(Integer projectId);
