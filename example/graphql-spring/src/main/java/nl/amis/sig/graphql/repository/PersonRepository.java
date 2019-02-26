@@ -13,4 +13,8 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     List<Person> findAll();
 
     Optional<Person> findById(Integer id);
+
+    List<Person> findByPractice_Id(Integer practiceId);
+
+    List<Person> findByProjects_Id(Integer projectId);
 }

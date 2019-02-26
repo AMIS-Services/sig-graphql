@@ -1,4 +1,6 @@
 type Query {
     hello: String
     people(id: Int): [Person]
+    practices(ids: [Int]): [Practice]
+    projects(name: String): [Project]
 }

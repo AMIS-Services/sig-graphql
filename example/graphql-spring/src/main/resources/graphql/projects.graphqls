@@ -1,8 +1,8 @@
 type Project {
     id: Int!
     name: String!
-    createdAt: String!
-    updatedAt: String!
-    people: [Person]!
-    practices: [Practice]!
+    createdAt: String
+    updatedAt: String
+    people: [Person]
+    practices: [Practice]
 }
