@@ -20,13 +20,13 @@ import nl.amis.sig.graphql.repository.ProjectRepository;
 
 @Component
 @Transactional
-public class Query implements GraphQLQueryResolver {
+public class QueryResolver implements GraphQLQueryResolver {
 
     private PersonRepository personRepository;
     private PracticeRepository practiceRepository;
     private ProjectRepository projectRepository;
 
-    public Query(PersonRepository personRepository, PracticeRepository practiceRepository,
+    public QueryResolver(PersonRepository personRepository, PracticeRepository practiceRepository,
             ProjectRepository projectRepository) {
         this.personRepository = personRepository;
         this.practiceRepository = practiceRepository;

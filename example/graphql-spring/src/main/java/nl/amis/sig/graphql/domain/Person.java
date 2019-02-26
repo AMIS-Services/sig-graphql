@@ -56,6 +56,11 @@ public class Person implements Serializable {
         return id;
     }
 
+    public Person id(Integer id) {
+        this.id = id;
+        return this;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }

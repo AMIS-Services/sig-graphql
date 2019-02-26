@@ -49,7 +49,7 @@ After you get the project running, you can start the transformation to graphQL b
 
 The application is configured to search for graphql schema files on the classpath with extension `.graphqls`. Let's add a simple schema file with the following content:
 
-```text
+```javascript
 type Query {
     hello: String
 }
@@ -188,5 +188,27 @@ Now try querying the name and practice for all people and for each practice get 
 Now that we have a nice resolver with nested subresolvers we have everything we need to update our front-end practices component from REST to GraphQL. Go on over to the README in the react folder and get started.
 
 ### Step 8: Mutations
+
+In the previous steps you created a fully operational graphql resource that allows queries on all entities and their properties. Essentially these are the `GET` requests in traditional REST APIs. In this step you will create `mutation`s for creating, updating and deleting a `person`.
+
+Add the following mutations to your schema:
+```javascript
+type Mutation {
+    createPerson(name: String, practiceId: Int, projectIds: [Int]): Person
+    updatePerson(id: Int!, name: String, practiceId: Int, projectIds: [Int]): Person
+    deletePerson(id: Int!): Int
+}
+```
+
+Like queries, Spring will look for a `@Component` implementing `GraphQLMutationResolver` and will expect all methods to have exactly one implementation. You may copy the implementation from the `PersonService` class.
+
+Try adding a new `Person` (from Postman):
+```javascript
+{
+	"query": "mutation { createPerson(name: \"Chiel\", practiceId: 1, projectIds: [1]) { id name createdAt updatedAt practice { id name } projects { id name } } }"
+}
+```
+Notice that the json still has the `"query"` key, while the value has a `mutation` indicator.
+Notice that you you can specify which fields you want returned from this operation (remember, it returns a `Person`) - moreover, you are required to specify at least one returning field!
 
 ### Step 9: Exception handling

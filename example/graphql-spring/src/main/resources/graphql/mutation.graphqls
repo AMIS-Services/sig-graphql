@@ -1,0 +1,11 @@
+type Mutation {
+    createPerson(name: String, practiceId: Int, projectIds: [Int]): Person
+    updatePerson(id: Int!, name: String, practiceId: Int, projectIds: [Int]): Person
+    deletePerson(id: Int!): Int
+    createPractice(name: String, personIds: Int, projectIds: [Int]): Practice
+    updatePractice(id: Int!, name: String, personIds: Int, projectIds: [Int]): Practice
+    deletePractice(id: Int!): Int
+    createProject(name: String, personIds: Int, practiceIds: [Int]): Project
+    updateProject(id: Int!, name: String, personIds: Int, practiceIds: [Int]): Project
+    deleteProject(id: Int!): Int
+}

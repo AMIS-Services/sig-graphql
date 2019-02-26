@@ -55,6 +55,11 @@ public class Project implements Serializable {
         return id;
     }
 
+    public Project id(Integer id) {
+        this.id = id;
+        return this;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
