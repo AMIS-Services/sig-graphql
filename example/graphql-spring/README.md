@@ -31,19 +31,19 @@ After you get the project running, you can start the transformation to graphQL b
 <dependency>
     <groupId>com.graphql-java</groupId>
     <artifactId>graphql-java-tools</artifactId>
-    <version>5.2.4</version>
+    <version>4.3.0</version>
 </dependency>
 <!--GraphQL-Java Spring boot starter for GraphQL - hosts our schema at the /graphql endpoint in our spring context-->
 <dependency>
     <groupId>com.graphql-java</groupId>
     <artifactId>graphql-spring-boot-starter</artifactId>
-    <version>5.0.2</version>
+    <version>4.0.0</version>
 </dependency>
 <!--GraphQL-Java Spring boot starter for GraphIQL - a web based UI for interacting with the /graphql endpoint, with knowledge of the schema at the endpoint-->
 <dependency>
     <groupId>com.graphql-java</groupId>
     <artifactId>graphiql-spring-boot-starter</artifactId>
-    <version>5.0.2</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
@@ -57,7 +57,7 @@ type Query {
 
 This schema defines the `hello` query, which returns a String.
 
-The application is configured to search for graphql resolvers on the classpath, java classes that implement `GraphQLQueryResolver` and are annotated with `@Controller`. You may have multiple java classes like this, but the queries defined in the graphql schema must and may only exist once among those java classes. 
+The application is configured to search for graphql resolvers on the classpath, java classes that implement `GraphQLQueryResolver` and are annotated with `@Controller`. This is called a `QueryResolver`. You may have multiple `QueryResolver`s, but the queries defined in the graphql schema must map to exactly one `QueryResolver`. 
 Create a new java class that implements `GraphQLQueryResolver`, is annotated with `@Controller` and has a public method called `hello()` returning a String - for instance "Hello world!".
 
 Now run the application and try the hello-query.
@@ -67,25 +67,80 @@ In Postman you could do the following POST to `http://localhost:3030/graphql`:
 	"query": "{ hello }"
 }
 ``` 
-Alternatively use graphiQL in the browser at `http://localhost:3030/graphiql`. This is a web based UI for interacting with the /graphql endpoint. Note that it is (over)simplified; the queries are not valid json. Use for example:
+Alternatively use graphiQL in the browser at `http://localhost:3030/graphiql`. This is a web based UI for interacting with the /graphql endpoint. It has basic knowledge of the graphQL schema and can help writing queries. Note that it does not support the same json input, but a simplified version (not valid json). Use for example:
 ```javascript
-{
+query {
 	hello
 }
 ``` 
 
 ### Step 2: Expanding the schema
 
-### Step 3: Wrapping a REST endpoint
+Being able to return static Strings is nice, but it does not satisfy the desire to replace the traditional REST api. Ultimately we want queries that return `people`, `practices` and `projects`. These will be queries, just like the `hello` query in the previous step. Unlike the `hello` query, these queries will return objects.
+
+Graphql is typed with basic types such as `Int`, `Float`, `String` and `Boolean` and the possibility to define your own types. The queries mentioned before will be of these custom types.
+Let's add the `Person` type:
+```javascript
+type Person {
+    id: Int!
+    name: String!
+    createdAt: String
+    updatedAt: String
+    practice: Practice
+    projects: [Project]
+}
+```
+Notice that the createdAt and updatedAt properties are Strings; graphql does not have a Date type! The exclamation marks mean that the field is non-nullable, which will be relevant later, for the mutations.
+
+Let's add the `people` query with type `[Person]` (the brackets indicate an Array). By adding this query to the schema, you are required to add it as `QueryResolver` as well. For now you can return a simple `List<Person>` object:
+```java
+Person person1 = new Person();
+person1.setId(1);
+person1.setName("Henk");
+
+List<Person> people = new ArrayList<Person>();
+people.add(person1);
+
+return people;
+```
+
+Try querying `people`. You may get an exception "`Sub selection required`". If you do, that's because graphql requires you to specify the fields of `Person` you want to get (between curly brackets).
+
+### Step 3: Returning actual data
+
+In the previous steps you created a `QueryResolver` for `people`. Add a constructor to the `QueryResolver` and `Autowire` the `PersonRepository`:
+```java
+private PersonRepository personRepository;
+public Query(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+}
+```
+Notice that the `@Autowired` annotation is not used; this is not required when constructors use classes that are annotated with `@Repository` (or any `@Component` annotation).
+
+Change the implementation of the `people` method to return the `findAll()` results of the repository.
+
+Try querying `people` again. Did you find `Kjettil`?
 
 ### Step 4: Inputs
 
-### Step 5: Writing a new resolver
+Like traditional REST, it is often desired to find the `person` with `id`. To do so, you need to change the schema and add a parameter to the `people` query:
+```javascript
+people(id: Int): [Person]
+```
+Like before, you also need to change the `QueryResolver`. Note: you need to return a `List<Person>`, as described in the schema - this can be a List with a single element! If you want to return a `Person`, you need to create a `person` query.
 
-### Step 6: Nested resolvers
+Try querying `people` with id: 1. Did you find `Kjettil`?
+Use the following query (from Postman):
+```javascript
+{
+	"query": "{ people(id: 1) { id name } }"
+}
+``` 
 
-### Step 7: To the front-end!
+### Step 5: Nested resolvers
 
-### Step 8: Mutations
+### Step 6: To the front-end!
 
-### Step 9: Exception handling
+### Step 7: Mutations
+
+### Step 8: Exception handling

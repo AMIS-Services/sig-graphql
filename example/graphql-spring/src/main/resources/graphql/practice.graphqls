@@ -1,0 +1,8 @@
+type Practice {
+    id: Int!
+    name: String!
+    createdAt: String!
+    updatedAt: String!
+    people: [Person]!
+    projects: [Project]!
+}

@@ -1,0 +1,8 @@
+type Person {
+    id: Int!
+    name: String!
+    createdAt: String!
+    updatedAt: String!
+    practice: Practice!
+    projects: [Project]!
+}
