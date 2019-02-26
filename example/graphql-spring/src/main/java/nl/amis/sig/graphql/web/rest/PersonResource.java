@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.amis.sig.graphql.domain.Person;
 import nl.amis.sig.graphql.service.PersonService;
-import nl.amis.sig.graphql.service.dto.PersonDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,27 +29,27 @@ public class PersonResource {
     }
 
     @GetMapping("/people")
-    public ResponseEntity<List<PersonDTO>> getPeople() {
-        return new ResponseEntity<List<PersonDTO>>(personService.getPeople(), HttpStatus.OK);
+    public ResponseEntity<List<Person>> getPeople() {
+        return new ResponseEntity<List<Person>>(personService.getPeople(), HttpStatus.OK);
     }
 
     @GetMapping("/people/{id}")
-    public ResponseEntity<PersonDTO> getPerson(@PathVariable Integer id) {
-        return personService.getPerson(id).map(person -> new ResponseEntity<PersonDTO>(person, HttpStatus.OK))
-                .orElse(new ResponseEntity<PersonDTO>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Person> getPerson(@PathVariable Integer id) {
+        return personService.getPerson(id).map(person -> new ResponseEntity<Person>(person, HttpStatus.OK))
+                .orElse(new ResponseEntity<Person>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/people")
-    public ResponseEntity<PersonDTO> createPerson(@RequestBody PersonDTO person) throws URISyntaxException {
-        PersonDTO createdPerson = personService.createPerson(person);
-        return ResponseEntity.created(new URI("/api/people/" + createdPerson.getId())).body(createdPerson);
+    public ResponseEntity<Person> createPerson(@RequestBody Person newPerson) throws URISyntaxException {
+        Person person = personService.createPerson(newPerson);
+        return ResponseEntity.created(new URI("/api/people/" + person.getId())).body(person);
     }
 
     @PutMapping("/people/{id}")
-    public ResponseEntity<PersonDTO> updatePerson(@PathVariable Integer id, @RequestBody PersonDTO person) {
-        return personService.updatePerson(id, person)
-                .map(updatedPerson -> new ResponseEntity<PersonDTO>(updatedPerson, HttpStatus.OK))
-                .orElse(new ResponseEntity<PersonDTO>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Person> updatePerson(@PathVariable Integer id, @RequestBody Person personUpdate) {
+        return personService.updatePerson(id, personUpdate)
+                .map(person -> new ResponseEntity<Person>(person, HttpStatus.OK))
+                .orElse(new ResponseEntity<Person>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/people/{id}")

@@ -10,8 +10,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -31,17 +31,19 @@ public class Practice implements Serializable {
 
     private String name;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "`createdAt`") // this postgresql column is case-sensitive
-    @CreationTimestamp
     private LocalDate createdAt;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "`updatedAt`") // this postgresql column is case-sensitive
-    @UpdateTimestamp
     private LocalDate updatedAt;
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "projects", "practice" })
     @OneToMany(mappedBy = "practice") // maps to the practice attribute of the Person object
     private Set<Person> people = new HashSet<Person>();
 
+    @JsonIgnoreProperties({ "name", "createdAt", "updatedAt", "people", "practices" })
     @ManyToMany
     // these postgresql table and columns are case-sensitive
     @JoinTable(name = "`PracticeProject`", joinColumns = { @JoinColumn(name = "`practiceId`") }, inverseJoinColumns = {

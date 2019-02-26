@@ -1,5 +1,6 @@
 package nl.amis.sig.graphql.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,48 +9,42 @@ import org.springframework.transaction.annotation.Transactional;
 
 import nl.amis.sig.graphql.domain.Person;
 import nl.amis.sig.graphql.repository.PersonRepository;
-import nl.amis.sig.graphql.service.dto.PersonDTO;
-import nl.amis.sig.graphql.service.mapper.PersonMapper;
 
 @Service
 @Transactional
 public class PersonService {
     private final PersonRepository personRepository;
 
-    private final PersonMapper personMapper;
-
-    public PersonService(PersonRepository personRepository, PersonMapper personMapper) {
+    public PersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
-        this.personMapper = personMapper;
     }
 
     @Transactional(readOnly = true)
-    public List<PersonDTO> getPeople() {
-        return personMapper.toDto(personRepository.findAll());
+    public List<Person> getPeople() {
+        return personRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<PersonDTO> getPerson(Integer id) {
-        return personRepository.findById(id).map(person -> personMapper.toDto(person));
+    public Optional<Person> getPerson(Integer id) {
+        return personRepository.findById(id);
     }
 
-    public PersonDTO createPerson(PersonDTO personDTO) {
-        Person person = new Person();
-        person.setName(personDTO.getName());
-        person.setPractice(personDTO.getPractice());
-        person.setProjects(personDTO.getProjects());
-        personRepository.save(person);
-        return personMapper.toDto(person);
+    public Person createPerson(Person newPerson) {
+        newPerson.setCreatedAt(LocalDate.now());
+        newPerson.setUpdatedAt(null);
+        personRepository.save(newPerson);
+        return newPerson;
     }
 
-    public Optional<PersonDTO> updatePerson(Integer id, PersonDTO personDTO) {
+    public Optional<Person> updatePerson(Integer id, Person personUpdate) {
         return personRepository.findById(id).map(person -> {
-            person.setName(personDTO.getName());
-            person.setPractice(personDTO.getPractice());
-            person.setProjects(personDTO.getProjects());
+            person.setName(personUpdate.getName());
+            person.setPractice(personUpdate.getPractice());
+            person.setProjects(personUpdate.getProjects());
+            person.setUpdatedAt(LocalDate.now());
             personRepository.save(person);
             return person;
-        }).map(personMapper::toDto);
+        });
     }
 
     public Optional<Integer> deletePerson(Integer id) {

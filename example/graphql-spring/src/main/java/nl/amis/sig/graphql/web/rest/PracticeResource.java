@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import nl.amis.sig.graphql.domain.Practice;
 import nl.amis.sig.graphql.service.PracticeService;
-import nl.amis.sig.graphql.service.dto.PracticeDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,27 +29,27 @@ public class PracticeResource {
     }
 
     @GetMapping("/practices")
-    public ResponseEntity<List<PracticeDTO>> getPractices() {
-        return new ResponseEntity<List<PracticeDTO>>(practiceService.getPractices(), HttpStatus.OK);
+    public ResponseEntity<List<Practice>> getPractices() {
+        return new ResponseEntity<List<Practice>>(practiceService.getPractices(), HttpStatus.OK);
     }
 
     @GetMapping("/practices/{id}")
-    public ResponseEntity<PracticeDTO> getPractice(@PathVariable Integer id) {
-        return practiceService.getPractice(id).map(practice -> new ResponseEntity<PracticeDTO>(practice, HttpStatus.OK))
-                .orElse(new ResponseEntity<PracticeDTO>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Practice> getPractice(@PathVariable Integer id) {
+        return practiceService.getPractice(id).map(practice -> new ResponseEntity<Practice>(practice, HttpStatus.OK))
+                .orElse(new ResponseEntity<Practice>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/practices")
-    public ResponseEntity<PracticeDTO> createPractice(@RequestBody PracticeDTO practice) throws URISyntaxException {
-        PracticeDTO createdPractice = practiceService.createPractice(practice);
-        return ResponseEntity.created(new URI("/api/practices/" + createdPractice.getId())).body(createdPractice);
+    public ResponseEntity<Practice> createPractice(@RequestBody Practice newPractice) throws URISyntaxException {
+        Practice practice = practiceService.createPractice(newPractice);
+        return ResponseEntity.created(new URI("/api/practices/" + practice.getId())).body(practice);
     }
 
     @PutMapping("/practices/{id}")
-    public ResponseEntity<PracticeDTO> updatePractice(@PathVariable Integer id, @RequestBody PracticeDTO practice) {
-        return practiceService.updatePractice(id, practice)
-                .map(updatedPractice -> new ResponseEntity<PracticeDTO>(updatedPractice, HttpStatus.OK))
-                .orElse(new ResponseEntity<PracticeDTO>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Practice> updatePractice(@PathVariable Integer id, @RequestBody Practice practiceUpdate) {
+        return practiceService.updatePractice(id, practiceUpdate)
+                .map(practice -> new ResponseEntity<Practice>(practice, HttpStatus.OK))
+                .orElse(new ResponseEntity<Practice>(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/practices/{id}")

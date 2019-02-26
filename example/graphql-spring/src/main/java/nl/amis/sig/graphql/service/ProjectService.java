@@ -1,5 +1,6 @@
 package nl.amis.sig.graphql.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,8 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import nl.amis.sig.graphql.domain.Project;
 import nl.amis.sig.graphql.repository.ProjectRepository;
-import nl.amis.sig.graphql.service.dto.ProjectDTO;
-import nl.amis.sig.graphql.service.mapper.ProjectMapper;
 
 @Service
 @Transactional
@@ -17,40 +16,36 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    private final ProjectMapper projectMapper;
-
-    public ProjectService(ProjectRepository projectRepository, ProjectMapper projectMapper) {
+    public ProjectService(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
-        this.projectMapper = projectMapper;
     }
 
     @Transactional(readOnly = true)
-    public List<ProjectDTO> getProjects() {
-        return projectMapper.toDto(projectRepository.findAll());
+    public List<Project> getProjects() {
+        return projectRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<ProjectDTO> getProject(Integer id) {
-        return projectRepository.findById(id).map(project -> projectMapper.toDto(project));
+    public Optional<Project> getProject(Integer id) {
+        return projectRepository.findById(id);
     }
 
-    public ProjectDTO createProject(ProjectDTO projectDTO) {
-        Project project = new Project();
-        project.setName(projectDTO.getName());
-        project.setPeople(projectDTO.getPeople());
-        project.setPractices(projectDTO.getPractices());
-        projectRepository.save(project);
-        return projectMapper.toDto(project);
+    public Project createProject(Project newProject) {
+        newProject.setCreatedAt(LocalDate.now());
+        newProject.setUpdatedAt(null);
+        projectRepository.save(newProject);
+        return newProject;
     }
 
-    public Optional<ProjectDTO> updateProject(Integer id, ProjectDTO projectDTO) {
+    public Optional<Project> updateProject(Integer id, Project projectUpdate) {
         return projectRepository.findById(id).map(project -> {
-            project.setName(projectDTO.getName());
-            project.setPeople(projectDTO.getPeople());
-            project.setPractices(projectDTO.getPractices());
+            project.setName(projectUpdate.getName());
+            project.setPeople(projectUpdate.getPeople());
+            project.setPractices(projectUpdate.getPractices());
+            project.setUpdatedAt(LocalDate.now());
             projectRepository.save(project);
             return project;
-        }).map(projectMapper::toDto);
+        });
     }
 
     public Optional<Integer> deleteProject(Integer id) {
