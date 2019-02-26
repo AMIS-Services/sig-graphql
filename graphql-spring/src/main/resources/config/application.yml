@@ -1,0 +1,30 @@
+logging:
+    level:
+        nl.amis.sig.graphql: DEBUG
+
+spring:
+    application:
+        name: SIG-graphql-spring-app
+    profiles: 
+        active: dev
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+        password: postgres_password
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        show-sql: true
+        hibernate:
+            naming:
+                # Since hibernate 5 camelCase is converted to snake_case by default
+                # This property overwrites that default to do no conversion
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        properties:
+            hibernate:
+                temp:
+                    # prevents the following error:
+                    # Disabling contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException
+                    use_jdbc_metadata_defaults: false
+
+server:
+    port: 3030

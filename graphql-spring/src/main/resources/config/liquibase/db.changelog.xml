@@ -1,0 +1,156 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="chiel_h (generated)" id="1550319357063-0">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-1">
+        <createTable tableName="PersonProject">
+            <column name="personId" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="PersonProject_pkey"/>
+            </column>
+            <column name="projectId" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="PersonProject_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-2">
+        <createTable tableName="PracticeProject">
+            <column name="practiceId" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="PracticeProject_pkey"/>
+            </column>
+            <column name="projectId" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="PracticeProject_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-3">
+        <createTable tableName="people">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="people_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="createdAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="practiceId" type="INTEGER"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-4">
+        <createTable tableName="practices">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="practices_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="createdAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-5">
+        <createTable tableName="projects">
+            <column autoIncrement="true" name="id" type="SERIAL">
+                <constraints primaryKey="true" primaryKeyName="projects_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="createdAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedAt" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319904124-1">
+        <insert tableName="PersonProject">
+            <column name="personId" valueNumeric="2"/>
+            <column name="projectId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="PersonProject">
+            <column name="personId" valueNumeric="3"/>
+            <column name="projectId" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319904124-2">
+        <insert tableName="PracticeProject">
+            <column name="practiceId" valueNumeric="1"/>
+            <column name="projectId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="PracticeProject">
+            <column name="practiceId" valueNumeric="2"/>
+            <column name="projectId" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319904124-3">
+        <insert tableName="people">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Kjettil"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.274"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.353"/>
+            <column name="practiceId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="people">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Mark"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.276"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.353"/>
+            <column name="practiceId" valueNumeric="1"/>
+        </insert>
+        <insert tableName="people">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Joost"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.333"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.354"/>
+            <column name="practiceId" valueNumeric="2"/>
+        </insert>
+        <insert tableName="people">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Robert"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.334"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.354"/>
+            <column name="practiceId" valueNumeric="2"/>
+        </insert>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319904124-4">
+        <insert tableName="practices">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ui"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.342"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.342"/>
+        </insert>
+        <insert tableName="practices">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="integratie"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.342"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.342"/>
+        </insert>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319904124-5">
+        <insert tableName="projects">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="CIS"/>
+            <column name="createdAt" valueDate="2019-02-16T13:24:31.347"/>
+            <column name="updatedAt" valueDate="2019-02-16T13:24:31.347"/>
+        </insert>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-6">
+        <addForeignKeyConstraint baseColumnNames="personId" baseTableName="PersonProject" constraintName="PersonProject_personId_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="people" validate="true"/>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-7">
+        <addForeignKeyConstraint baseColumnNames="projectId" baseTableName="PersonProject" constraintName="PersonProject_projectId_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="projects" validate="true"/>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-8">
+        <addForeignKeyConstraint baseColumnNames="practiceId" baseTableName="PracticeProject" constraintName="PracticeProject_practiceId_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="practices" validate="true"/>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-9">
+        <addForeignKeyConstraint baseColumnNames="projectId" baseTableName="PracticeProject" constraintName="PracticeProject_projectId_fkey" deferrable="false" initiallyDeferred="false" onDelete="CASCADE" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="projects" validate="true"/>
+    </changeSet>
+    <changeSet author="chiel_h (generated)" id="1550319357063-10">
+        <addForeignKeyConstraint baseColumnNames="practiceId" baseTableName="people" constraintName="people_practiceId_fkey" deferrable="false" initiallyDeferred="false" onDelete="SET NULL" onUpdate="CASCADE" referencedColumnNames="id" referencedTableName="practices" validate="true"/>
+    </changeSet>
+</databaseChangeLog>
