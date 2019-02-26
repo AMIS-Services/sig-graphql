@@ -57,8 +57,8 @@ type Query {
 
 This schema defines the `hello` query, which returns a String.
 
-The application is configured to search for graphql resolvers on the classpath, java classes that implement `GraphQLQueryResolver` and are annotated with `@Controller`. This is called a `QueryResolver`. You may have multiple `QueryResolver`s, but the queries defined in the graphql schema must map to exactly one `QueryResolver`. 
-Create a new java class that implements `GraphQLQueryResolver`, is annotated with `@Controller` and has a public method called `hello()` returning a String - for instance "Hello world!".
+The application is configured to search for graphql resolvers on the classpath, java classes that implement `GraphQLQueryResolver` and are annotated with `@Component`. This is called a `QueryResolver`. You may have multiple `QueryResolver`s, but the queries defined in the graphql schema must map to exactly one `QueryResolver`. 
+Create a new java class that implements `GraphQLQueryResolver`, is annotated with `@Component` and has a public method called `hello()` returning a String - for instance "Hello world!".
 
 Now run the application and try the hello-query.
 In Postman you could do the following POST to `http://localhost:3030/graphql`:
@@ -117,9 +117,9 @@ public Query(PersonRepository personRepository) {
 ```
 Notice that the `@Autowired` annotation is not used; this is not required when constructors use classes that are annotated with `@Repository` (or any `@Component` annotation).
 
-Change the implementation of the `people` method to return the `findAll()` results of the repository.
+Change the implementation of the `people` method to return the `getPeople()` results of the service (or the `findAll()` results of the repository).
 
-Try querying `people` again. Did you find `Kjettil`?
+Try querying `people` again. Do you get a list of Person?
 
 ### Step 4: Inputs
 
@@ -129,18 +129,64 @@ people(id: Int): [Person]
 ```
 Like before, you also need to change the `QueryResolver`. Note: you need to return a `List<Person>`, as described in the schema - this can be a List with a single element! If you want to return a `Person`, you need to create a `person` query.
 
-Try querying `people` with id: 1. Did you find `Kjettil`?
+Try querying `people` with id: 1.
 Use the following query (from Postman):
 ```javascript
 {
 	"query": "{ people(id: 1) { id name } }"
 }
-``` 
+```
+Did you find `Kjettil`?
 
-### Step 5: Nested resolvers
+### Step 5: Writing a new resolver
 
-### Step 6: To the front-end!
+Create queries for `practices` and `projects`, this time with different inputs. For `practices` we want to search using an array of `ids` and for `projects` we want to search by `name`.
+Use the following queries (from Postman):
+```javascript
+{
+	"query": "{ practices(ids: [1, 2]) { id name } projects(name: \"CIS\") { id name } }"
+}
+```
+Notice that both the `practices` and `projects` queries are called, the `practices` query is called with the ids List `[1, 2]` and the `projects` query is called with name String `\"CIS\"`, where the backslashes are used to escape the double quotes.
 
-### Step 7: Mutations
+### Step 6: Nested resolvers
 
-### Step 8: Exception handling
+At this point you effectively rewrote the `/people` (step 3), `/practices` (step 5) and `/projects` (step 5) resources. In step 4 you rewrote the `/people/{id}` resource and you even created resources that would require specific query parameters. However, compared to traditional REST this barely has any advantages - you could even say this is more complex!
+The real advantage of graphql over traditional REST is how details of entities are obtained. To implement this, you need to add a `FieldResolver` - a java class that implements `GraphQLResolver<Entity>` - with methods for each queryable attribute. For example:
+```java
+@Component
+@Transactional
+public class PersonResolver implements GraphQLResolver<Person> {
+
+    private PracticeRepository practiceRepository;
+    private ProjectRepository projectRepository;
+
+    public PersonResolver(PracticeRepository practiceRepository, ProjectRepository projectRepository) {
+        this.practiceRepository = practiceRepository;
+        this.projectRepository = projectRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Practice> getPractice(Person person) {
+        return practiceRepository.findByPeople_Id(person.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Project> getProjects(Person person) {
+        return projectRepository.findByPeople_Id(person.getId());
+    }
+}
+```
+Notice the `findBy`-statements on the repositories. These statements use the `@ManyToMany` relation between `people` and `practices` and `projects` respectively.
+
+Add `EntityResolver`s for the entities `Practice` and `Project` as well.
+
+Now try querying the name and practice for all people and for each practice get its name and the name of all related projects 
+
+### Step 7: To the front-end!
+
+Now that we have a nice resolver with nested subresolvers we have everything we need to update our front-end practices component from REST to GraphQL. Go on over to the README in the react folder and get started.
+
+### Step 8: Mutations
+
+### Step 9: Exception handling
