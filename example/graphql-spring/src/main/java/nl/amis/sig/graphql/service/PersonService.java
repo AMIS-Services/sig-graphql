@@ -31,7 +31,7 @@ public class PersonService {
 
     public Person createPerson(Person newPerson) {
         newPerson.setCreatedAt(LocalDate.now());
-        newPerson.setUpdatedAt(null);
+        newPerson.setUpdatedAt(LocalDate.now());
         personRepository.save(newPerson);
         return newPerson;
     }

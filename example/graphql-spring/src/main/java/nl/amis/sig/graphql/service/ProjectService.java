@@ -32,7 +32,7 @@ public class ProjectService {
 
     public Project createProject(Project newProject) {
         newProject.setCreatedAt(LocalDate.now());
-        newProject.setUpdatedAt(null);
+        newProject.setUpdatedAt(LocalDate.now());
         projectRepository.save(newProject);
         return newProject;
     }

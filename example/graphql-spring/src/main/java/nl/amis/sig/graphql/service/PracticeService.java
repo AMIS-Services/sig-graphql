@@ -32,7 +32,7 @@ public class PracticeService {
 
     public Practice createPractice(Practice newPractice) {
         newPractice.setCreatedAt(LocalDate.now());
-        newPractice.setUpdatedAt(null);
+        newPractice.setUpdatedAt(LocalDate.now());
         practiceRepository.save(newPractice);
         return newPractice;
     }
