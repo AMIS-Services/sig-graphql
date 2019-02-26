@@ -55,9 +55,6 @@ const resolvers = {
   Practice: {
     people: practicesPeopleResolver,
     projects: practicesProjectsResolver
-  },
-  Person: {
-    practices: person => []
   }
 };
 

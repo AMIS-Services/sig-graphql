@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "start": "nodemon --exec babel-node src/index.js",
+    "start-db": "docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=postgres_password --name graphqlPostgres postgres",
+    "seed-db": "babel-node seed.js",
+    "stop-db": "docker rm -f graphqlPostgres",
+    "reset-db": "yarn stop-db & yarn start-db"
+  },
+  "dependencies": {
+    "apollo-server-express": "^2.4.2",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "graphql": "^14.1.1",
+    "graphql-tools": "^4.0.4",
+    "node-fetch": "^2.3.0",
+    "pg": "^7.8.0",
+    "sequelize": "^4.42.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "nodemon": "^1.18.9"
+  }
+}
