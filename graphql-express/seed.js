@@ -2,13 +2,13 @@ import db from "./src/db";
 
 const seed = async () => {
   const membersUi = [
-    // { name: "Bram" },
-    // { name: "Chiel" },
-    // { name: "Nathan" },
-    // { name: "Esmeralda" },
-    // { name: "Jeroen" },
-    // { name: "Nancy" },
-    // { name: "Matthijs" },
+    { name: "Bram" },
+    { name: "Chiel" },
+    { name: "Nathan" },
+    { name: "Esmeralda" },
+    { name: "Jeroen" },
+    { name: "Nancy" },
+    { name: "Matthijs" },
     { name: "Kjettil" },
     { name: "Mark" }
   ];
@@ -54,7 +54,6 @@ const seed = async () => {
   projectEntities[0].addPractice(practiceEntities[0]);
   projectEntities[0].addPractice(practiceEntities[1]);
 
-  // projects <-> companies
 };
 
 seed();
