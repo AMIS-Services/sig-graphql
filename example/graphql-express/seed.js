@@ -2,13 +2,13 @@ import db from "./src/db";
 
 const seed = async () => {
   const membersUi = [
-    // { name: "Bram" },
-    // { name: "Chiel" },
-    // { name: "Nathan" },
-    // { name: "Esmeralda" },
-    // { name: "Jeroen" },
-    // { name: "Nancy" },
-    // { name: "Matthijs" },
+    { name: "Bram" },
+    { name: "Chiel" },
+    { name: "Nathan" },
+    { name: "Esmeralda" },
+    { name: "Jeroen" },
+    { name: "Nancy" },
+    { name: "Matthijs" },
     { name: "Kjettil" },
     { name: "Mark" }
   ];
@@ -17,9 +17,12 @@ const seed = async () => {
 
   const practices = [{ name: "ui" }, { name: "integratie" }];
 
-  const projects = [{ name: "CIS" }];
+  const projects = [{ name: "CIS" }, { name: "Flex-ID" }, { name: "Floriday Insights" }, { name: "Conclusion Flora" }];
 
   const cisMembers = ["Joost", "Mark"];
+  const flexIdMembers = ["Matthijs", "Nancy", "Jeroen"];
+  const rfhMembers = ["Bram", "Nathan"];
+  const conclusionFloraMembers = ["Esmeralda", "Kjettil"];
 
   const uiPeopleEntities = await Promise.all(membersUi.map(async person => await db.person.create({ ...person })));
   const integrationPeopleEntities = await Promise.all(
@@ -50,11 +53,24 @@ const seed = async () => {
     .filter(person => cisMembers.includes(person.dataValues.name))
     .map(person => person.addProject(projectEntities[0]));
 
+  allPersonEntities
+    .filter(person => flexIdMembers.includes(person.dataValues.name))
+    .map(person => person.addProject(projectEntities[1]));
+
+  allPersonEntities
+    .filter(person => rfhMembers.includes(person.dataValues.name))
+    .map(person => person.addProject(projectEntities[2]));
+
+  allPersonEntities
+    .filter(person => conclusionFloraMembers.includes(person.dataValues.name))
+    .map(person => person.addProject(projectEntities[3]));
+
   // practices <->projects
   projectEntities[0].addPractice(practiceEntities[0]);
   projectEntities[0].addPractice(practiceEntities[1]);
-
-  // projects <-> companies
+  projectEntities[1].addPractice(practiceEntities[0]);
+  projectEntities[2].addPractice(practiceEntities[0]);
+  projectEntities[3].addPractice(practiceEntities[0]);
 };
 
 seed();
